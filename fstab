@@ -1,0 +1,6 @@
+# Ubuntu/Linux root filesystem
+UUID="c7877b0d-5bcf-41f6-a50e-b5601056c58e"	/	ext4	noatime,nodiratime,relatime,usrquota,grpquota,user_xattr,errors=remount-ro	0	1
+
+# Vubuntu patch : 記憶體分頁置換空間
+UUID="47e434c4-765d-488a-a0b5-6cc93adabcbc"	swap	swap	defaults	0	0
+
