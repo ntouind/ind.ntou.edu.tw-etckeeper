@@ -27,6 +27,7 @@
 
 text/plain; less '%s'; needsterminal
 text/html; /usr/bin/sensible-browser '%s'; description=HTML Text; nametemplate=%s.html
+application/x-troff-man; /usr/bin/nroff -mandoc -Tutf8; copiousoutput; print=/usr/bin/nroff -mandoc -Tutf8 | print text/plain:-
 text/plain; more '%s'; needsterminal
 application/pkcs12; /usr/bin/gcr-viewer %s; test=test -n "$DISPLAY"
 application/pkcs12+pem; /usr/bin/gcr-viewer %s; test=test -n "$DISPLAY"
