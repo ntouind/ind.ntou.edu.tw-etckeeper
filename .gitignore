@@ -52,3 +52,10 @@ fake-hwclock.data
 DEADJOE
 
 # end section managed by etckeeper
+
+# 忽略使用者帳號資料庫備份檔
+passwd-
+shadow-
+group-
+gshadow-
+
