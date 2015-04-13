@@ -24,3 +24,4 @@ sshd:*:16537:0:99999:7:::
 Vdragon:$6$lw06jS06$2hEljAtYWvCnR1Pt8Hxo3TtdI.M5Dv3.puNLagWD7zNWgZomRwPyF3iT.AxCW.zTF7I7544sKvfaXG8iYC2UH/:16537:0:99999:7:::
 dnsmasq:*:16537:0:99999:7:::
 colord:*:16537:0:99999:7:::
+mysql:!:16538:0:99999:7:::
