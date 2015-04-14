@@ -1,6 +1,7 @@
 # Webmin 的 Git 忽略規則
 # Webmin's Git ignore rules
-## Automatic generated files after Webmin install, better ignore them until found somthing valuable to track for.
-package-updates/current.cache
-system-status/history/
-system-status/info
+## 目前 Webmin 似乎把很多無值得版本控制的檔案放在 /etc/webmin 底下，因此改用白名單模式避免追蹤到無謂的資料
+*
+.*
+!.gitignore
+
