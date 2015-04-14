@@ -1,0 +1,12 @@
+whoami
+pwd
+cd /
+cd ~
+env
+ls
+pwd
+pwd
+ls
+whoami
+ls -a
+dmesg
