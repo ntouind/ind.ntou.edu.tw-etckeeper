@@ -1,0 +1,3 @@
+cvsroot=/usr/local/cvsroot
+cvs=cvs
+view_header=header.html

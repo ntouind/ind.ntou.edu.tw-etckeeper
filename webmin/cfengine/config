@@ -1,0 +1,4 @@
+cfengine_dir=/etc/cfengine
+cfengine=/usr/bin/cfengine
+cfd=/usr/sbin/cfd
+cfrun=/usr/sbin/cfrun
