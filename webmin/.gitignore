@@ -1,0 +1,6 @@
+# Webmin 的 Git 忽略規則
+# Webmin's Git ignore rules
+## Automatic generated files after Webmin install, better ignore them until found somthing valuable to track for.
+package-updates/current.cache
+system-status/history/
+system-status/info
