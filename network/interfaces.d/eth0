@@ -1,0 +1,9 @@
+# 預設乙太網路介面網路連線設定
+auto eth0
+iface eth0 inet static
+        address 140.121.80.26
+        netmask 255.255.255.0
+        network 140.121.80.0
+        broadcast 140.121.80.255
+        gateway 140.121.80.254
+        dns-nameservers 140.121.80.16
