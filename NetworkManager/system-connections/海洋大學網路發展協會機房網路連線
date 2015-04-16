@@ -1,0 +1,14 @@
+[connection]
+id=海洋大學網路發展協會機房網路連線
+uuid=842a11e5-c7b9-45db-9770-152d7ed9b00e
+type=802-3-ethernet
+
+[ipv6]
+method=ignore
+
+[ipv4]
+method=manual
+dns=140.121.80.16;8.8.4.4;8.8.8.8;
+address1=140.121.80.26/24,140.121.80.254
+may-fail=false
+
