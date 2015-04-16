@@ -1,3 +1,2 @@
-[user]
-	name = IND Official Website Service Itself
-	email = ntouind@gmail.com
+[core]
+	quotepath = false
