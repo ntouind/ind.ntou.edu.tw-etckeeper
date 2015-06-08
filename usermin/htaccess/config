@@ -1,2 +1,2 @@
-htaccess=.htaccess
 webmin_apache=/etc/webmin/apache
+htaccess=.htaccess

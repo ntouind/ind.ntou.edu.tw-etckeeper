@@ -1,6 +1,6 @@
-params_file=0
-display_mode=0
 columns=2
+display_mode=0
+params_file=0
 webmin_config=/etc/webmin/custom
-params_cmd=0
 access=*: *
+params_cmd=0
