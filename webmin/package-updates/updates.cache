@@ -1,1 +1,18 @@
-$VAR1 = [];
+$VAR1 = [
+          {
+            'name' => 'usermin',
+            'source' => 'sarge',
+            'system' => 'apt',
+            'update' => 'usermin',
+            'arch' => 'all',
+            'version' => '1.670'
+          },
+          {
+            'name' => 'webmin',
+            'arch' => 'all',
+            'system' => 'apt',
+            'update' => 'webmin',
+            'source' => 'sarge',
+            'version' => '1.760'
+          }
+        ];
