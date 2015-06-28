@@ -3,15 +3,15 @@ $VAR1 = [
             'name' => 'usermin',
             'version' => '1.670',
             'source' => 'sarge',
-            'update' => 'usermin',
             'system' => 'apt',
+            'update' => 'usermin',
             'arch' => 'all'
           },
           {
-            'system' => 'apt',
-            'update' => 'webmin',
-            'arch' => 'all',
             'source' => 'sarge',
+            'system' => 'apt',
+            'arch' => 'all',
+            'update' => 'webmin',
             'version' => '1.760',
             'name' => 'webmin'
           }
