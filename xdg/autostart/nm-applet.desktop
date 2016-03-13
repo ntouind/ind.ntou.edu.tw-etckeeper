@@ -11,4 +11,5 @@ X-GNOME-Bugzilla-Bugzilla=GNOME
 X-GNOME-Bugzilla-Product=NetworkManager
 X-GNOME-Bugzilla-Component=nm-applet
 X-GNOME-UsesNotifications=true
+AutostartCondition=GNOME3 unless-session gnome
 X-Ubuntu-Gettext-Domain=nm-applet
