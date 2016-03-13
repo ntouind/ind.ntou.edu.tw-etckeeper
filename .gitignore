@@ -30,6 +30,7 @@ ntp.conf.dhcp
 .initctl
 webmin/fsdump/*.status
 webmin/webmin/oscache
+webmin/package-updates/updates.cache
 apparmor.d/cache/*
 service/*/supervise/*
 service/*/log/supervise/*
