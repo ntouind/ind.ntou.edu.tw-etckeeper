@@ -1,0 +1,10 @@
+#!/bin/sh
+mkdir --parents "/var/log/Let's Encrypt"
+ 
+"/home/Vdragon/Workarounds/Safepath_for_letsencrypt/letsencrypt-auto" renew >> "/var/log/Let's Encrypt/renew.log" 2>&1 
+if [ $? -ne 0 ]; then
+    echo Automated renewal failed, see "/var/log/Let's Encrypt/renew.log" for details
+    exit 1
+fi
+exit 0
+
