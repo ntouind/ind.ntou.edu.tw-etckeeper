@@ -1,4 +1,23 @@
-deb http://ftp.ntou.edu.tw/ubuntu trusty main restricted universe multiverse
+###### Ubuntu Main Repos
+deb http://ftp.ntou.edu.tw/ubuntu/ trusty main restricted universe multiverse 
+#deb-src http://ftp.ntou.edu.tw/ubuntu/ trusty main restricted universe multiverse 
+
+###### Ubuntu Update Repos
+deb http://ftp.ntou.edu.tw/ubuntu/ trusty-security main restricted universe multiverse 
+#deb-src http://ftp.ntou.edu.tw/ubuntu/ trusty-security main restricted universe multiverse 
+deb http://ftp.ntou.edu.tw/ubuntu/ trusty-updates main restricted universe multiverse 
+#deb-src http://ftp.ntou.edu.tw/ubuntu/ trusty-updates main restricted universe multiverse 
+deb http://ftp.ntou.edu.tw/ubuntu/ trusty-backports main restricted universe multiverse 
+#deb-src http://ftp.ntou.edu.tw/ubuntu/ trusty-backports main restricted universe multiverse 
+
+###### Ubuntu Partner Repo
+deb http://archive.canonical.com/ubuntu trusty partner
+#deb-src http://archive.canonical.com/ubuntu trusty partner
+
+###### Ubuntu Extras Repo
+deb http://extras.ubuntu.com/ubuntu trusty main
+#deb-src http://extras.ubuntu.com/ubuntu trusty main
+
 
 
 
