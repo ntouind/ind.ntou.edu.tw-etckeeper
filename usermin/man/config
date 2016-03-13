@@ -1,9 +1,9 @@
-man_cmd_sect=man SECTION PAGE
 man2html_path=man2html
-man_cmd=man PAGE
-doc_dir=/usr/share/doc
-list_cmd=man -w PAGE
+kernel_dir=/usr/src/linux/Documentation
 search_cmd=man -k PAGE
 man_dir=/usr/man:/usr/share/man:/usr/local/man:/usr/local/share/man
+list_cmd=man -w PAGE
+doc_dir=/usr/share/doc
+man_cmd_sect=man SECTION PAGE
+man_cmd=man PAGE
 list_cmd_sect=man -w SECTION PAGE
-kernel_dir=/usr/src/linux/Documentation
