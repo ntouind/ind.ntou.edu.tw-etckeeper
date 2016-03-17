@@ -25,3 +25,4 @@ Vdragon:$6$lw06jS06$2hEljAtYWvCnR1Pt8Hxo3TtdI.M5Dv3.puNLagWD7zNWgZomRwPyF3iT.AxC
 dnsmasq:*:16537:0:99999:7:::
 colord:*:16537:0:99999:7:::
 mysql:!:16538:0:99999:7:::
+ind:$6$PQCejNjo$s557fviXGYOO75Gdmhd.Nnff7j7CuGAzIzaDa72ovpUqMhSPzxmp80/wAlx6SLV7MOF9h6XZSbhI2P3XzmnMC0:16876:0:99999:7:::
