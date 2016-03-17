@@ -59,4 +59,6 @@ passwd-
 shadow-
 group-
 gshadow-
+subuid-
+subgid-
 
