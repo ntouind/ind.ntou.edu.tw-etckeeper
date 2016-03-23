@@ -1,10 +1,13 @@
 #!/bin/sh
-mkdir --parents "/var/log/Let's Encrypt"
- 
-"/opt/Let's Encrypt/letsencrypt-auto" renew 2>&1 >> "/var/log/Let's Encrypt/renew.log"
+LOG_LOCATION="/var/log/Let's Encrypt"
+LET_S_ENCRYPT_AUTO_LOCATION="/opt/Let's Encrypt"
+
+mkdir --parents "$LOG_LOCATION"
+
+printf "=== Renewal started at $(date) ===\n" >> "$LOG_LOCATION/renew.log"
+"$LET_S_ENCRYPT_AUTO_LOCATION/letsencrypt-auto" renew 2>&1 >> "$LOG_LOCATION/renew.log"
 if [ $? -ne 0 ]; then
-    echo Automated renewal failed, see "/var/log/Let's Encrypt/renew.log" for details
+    echo Automated renewal failed, see "$LOG_LOCATION/renew.log" for details
     exit 1
 fi
 exit 0
-
