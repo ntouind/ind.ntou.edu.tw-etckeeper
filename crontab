@@ -15,3 +15,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # 遵從海洋大學網路發展協會安全伺服器規定，每日凌晨4點進行系統重新啟動作業
 55 3	* * *	root	/sbin/shutdown -r +5
+
+# Running Wetty at System Start Up
+# http://www.tecmint.com/access-linux-server-terminal-in-web-browser-using-wetty
+# Currently disabled as there's no way to prevent hackers brute-force it currently.
+# @reboot node /opt/wetty/app.js --sslkey /etc/letsencrypt/live/new.ind.ntou.edu.tw/privkey.pem --sslcert /etc/letsencrypt/live/new.ind.ntou.edu.tw/fullchain.pem -p 2222
+
