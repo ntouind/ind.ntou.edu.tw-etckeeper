@@ -1,6 +1,6 @@
-sox=sox
-mkisofs=mkisofs
-speed=1
-mpg123=mpg123
-cdrdao=cdrdao
 cdrecord=cdrecord
+sox=sox
+cdrdao=cdrdao
+mpg123=mpg123
+speed=1
+mkisofs=mkisofs
