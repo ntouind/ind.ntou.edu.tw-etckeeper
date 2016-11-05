@@ -50,3 +50,4 @@ colord:!::
 ssl-cert:!::
 mlocate:!::
 mysql:!::
+vboxsf:!::
