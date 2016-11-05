@@ -2,3 +2,7 @@
 	helper = cache --timeout 3600
 [core]
 	quotepath = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true

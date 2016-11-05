@@ -114,3 +114,4 @@ shell=1
 cluster-software=1
 filemin=1
 firewalld=0
+firewall6=1

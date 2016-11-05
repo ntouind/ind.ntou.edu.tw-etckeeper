@@ -1,8 +1,8 @@
 htpasswd=.htpasswd
-sort=0
-htgroups=.htgroups
-htaccess=.htaccess
 md5=1
+sort=0
 digest=1
-sha1=0
+htgroups=.htgroups
 extra_directives=
+sha1=0
+htaccess=.htaccess
