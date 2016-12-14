@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# 定期更新 Let's Encrypt 的證書
+# 參考資料：https://certbot.eff.org/docs/using.html#renewing-certificates
+letsencrypt renew
+exit 0
