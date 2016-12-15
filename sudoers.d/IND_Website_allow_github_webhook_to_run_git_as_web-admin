@@ -1,2 +1,0 @@
-# Allow www-data user to run git commands using web-admin group
-www-data	ALL = (:web-admin) NOPASSWD: /usr/bin/git reset --hard, /usr/bin/git pull --force, /usr/bin/git lfs pull
