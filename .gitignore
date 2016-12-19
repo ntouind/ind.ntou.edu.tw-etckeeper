@@ -69,3 +69,6 @@ ssh/*key
 # 不追蹤 Let's Encrypt keys
 # 參閱 https://certbot.eff.org/docs/using.html#where-are-my-certificates
 letsencrypt/
+
+# 不追蹤 SSL/TLS 私鑰
+ssl/private/
