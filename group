@@ -56,4 +56,4 @@ lpadmin:x:115:Lin-Buo-Ren
 sambashare:x:116:Lin-Buo-Ren
 ssl-cert:x:117:
 web-admin:x:1001:Lin-Buo-Ren
-site-admin:x:1004:
+site-admin:x:1004:Lin-Buo-Ren
