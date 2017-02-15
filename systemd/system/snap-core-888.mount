@@ -1,0 +1,10 @@
+[Unit]
+Description=Mount unit for core
+
+[Mount]
+What=/var/lib/snapd/snaps/core_888.snap
+Where=/snap/core/888
+Type=squashfs
+
+[Install]
+WantedBy=multi-user.target
