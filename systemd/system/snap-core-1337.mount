@@ -2,8 +2,8 @@
 Description=Mount unit for core
 
 [Mount]
-What=/var/lib/snapd/snaps/core_1222.snap
-Where=/snap/core/1222
+What=/var/lib/snapd/snaps/core_1337.snap
+Where=/snap/core/1337
 Type=squashfs
 
 [Install]

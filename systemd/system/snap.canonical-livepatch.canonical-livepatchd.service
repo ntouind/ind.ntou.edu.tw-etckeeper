@@ -1,15 +1,16 @@
 [Unit]
 # Auto-generated, DO NO EDIT
 Description=Service for snap application canonical-livepatch.canonical-livepatchd
-Requires=snap-canonical\x2dlivepatch-17.mount
+Requires=snap-canonical\x2dlivepatch-21.mount
 Wants=network-online.target
-After=snap-canonical\x2dlivepatch-17.mount network-online.target
+After=snap-canonical\x2dlivepatch-21.mount network-online.target
 X-Snappy=yes
 
 [Service]
 ExecStart=/usr/bin/snap run canonical-livepatch.canonical-livepatchd
 Restart=on-failure
-WorkingDirectory=/var/snap/canonical-livepatch/17
+WorkingDirectory=/var/snap/canonical-livepatch/21
+
 
 
 TimeoutStopSec=30
