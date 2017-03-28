@@ -1,0 +1,10 @@
+[Unit]
+Description=Mount unit for canonical-livepatch
+
+[Mount]
+What=/var/lib/snapd/snaps/canonical-livepatch_22.snap
+Where=/snap/canonical-livepatch/22
+Type=squashfs
+
+[Install]
+WantedBy=multi-user.target
