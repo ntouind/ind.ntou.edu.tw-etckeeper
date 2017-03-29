@@ -185,7 +185,6 @@ EOM
 		clear_cache
 		load_configured_profiles
 		rc=$?
-		unload_obsolete_profiles
 
 		log_end_msg "$rc"
 		;;
