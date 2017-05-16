@@ -1,7 +1,7 @@
 # Author: Jamie Strandboge <jamie@canonical.com>
 #include <tunables/global>
 
-/usr/lib/snapd/snap-confine (attach_disconnected) {
+/snap/core/1689/usr/lib/snapd/snap-confine (attach_disconnected) {
     # We run privileged, so be fanatical about what we include and don't use
     # any abstractions
     /etc/ld.so.cache r,
@@ -22,7 +22,7 @@
     /usr/lib/@{multiarch}/libseccomp.so* mr,
     /lib/@{multiarch}/libseccomp.so* mr,
 
-    /usr/lib/snapd/snap-confine mr,
+    /snap/core/1689/usr/lib/snapd/snap-confine mr,
 
     /dev/null rw,
     /dev/full rw,
@@ -93,10 +93,6 @@
 
     # reading mount profiles
     /{tmp/snap.rootfs_*/,}var/lib/snapd/mount/*.fstab r,
-
-    # LP: #1668659
-    mount options=(rw rbind) /snap/ -> /snap/,
-    mount options=(rw rshared) -> /snap/,
 
     # boostrapping the mount namespace
     mount options=(rw rshared) -> /,
@@ -279,10 +275,6 @@
     /var/lib/lxd/ w,
     /var/lib/snapd/hostfs/var/lib/lxd r,
 
-    # support for locking
-    /run/snapd/lock/ rw,
-    /run/snapd/lock/*.lock rwk,
-
     # support for the mount namespace sharing
     capability sys_ptrace,
     # allow snap-confine to read /proc/1/ns/mnt
@@ -296,15 +288,14 @@
     /run/snapd/ns/ rw,
     /run/snapd/ns/*.lock rwk,
     /run/snapd/ns/*.mnt rw,
-    /run/snapd/ns/*.fstab rw,
-    ptrace (read, readby, tracedby) peer=/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    ptrace (read, readby, tracedby) peer=/snap/core/1689/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
     @{PROC}/*/mountinfo r,
     capability sys_chroot,
     capability sys_admin,
-    signal (send, receive) set=(abrt) peer=/usr/lib/snapd/snap-confine,
-    signal (send) set=(int) peer=/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
-    signal (send, receive) set=(alrm, exists) peer=/usr/lib/snapd/snap-confine,
-    signal (receive) set=(exists) peer=/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    signal (send, receive) set=(abrt) peer=/snap/core/1689/usr/lib/snapd/snap-confine,
+    signal (send) set=(int) peer=/snap/core/1689/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    signal (send, receive) set=(alrm, exists) peer=/snap/core/1689/usr/lib/snapd/snap-confine,
+    signal (receive) set=(exists) peer=/snap/core/1689/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
 
     # For aa_change_hat() to go into ^mount-namespace-capture-helper
     @{PROC}/[0-9]*/attr/current w,
@@ -329,7 +320,7 @@
         /usr/lib/@{multiarch}/libseccomp.so* mr,
         /lib/@{multiarch}/libseccomp.so* mr,
 
-        /usr/lib/snapd/snap-confine mr,
+        /snap/core/1689/usr/lib/snapd/snap-confine mr,
 
         /dev/null rw,
         /dev/full rw,
@@ -352,19 +343,19 @@
         # NOTE: the source name is / even though we map /proc/123/ns/mnt
         mount options=(rw bind) / -> /run/snapd/ns/*.mnt,
         # This is the SIGALRM that we send and receive if a timeout expires
-        signal (send, receive) set=(alrm) peer=/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+        signal (send, receive) set=(alrm) peer=/snap/core/1689/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
         # Those two rules are exactly the same but we don't know if the parent process is still alive
         # and hence has the appropriate label or is already dead and hence has no label.
-        signal (send) set=(exists) peer=/usr/lib/snapd/snap-confine,
+        signal (send) set=(exists) peer=/snap/core/1689/usr/lib/snapd/snap-confine,
         signal (send) set=(exists) peer=unconfined,
         # This is so that we can abort
-        signal (send, receive) set=(abrt) peer=/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+        signal (send, receive) set=(abrt) peer=/snap/core/1689/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
         #  This is the signal we get if snap-confine dies (we subscribe to it with prctl)
-        signal (receive) set=(int) peer=/usr/lib/snapd/snap-confine,
+        signal (receive) set=(int) peer=/snap/core/1689/usr/lib/snapd/snap-confine,
         # This allows snap-confine to be killed from the outside.
         signal (receive) peer=unconfined,
         # This allows snap-confine to wait for us
-        ptrace (read, trace, tracedby) peer=/usr/lib/snapd/snap-confine,
+        ptrace (read, trace, tracedby) peer=/snap/core/1689/usr/lib/snapd/snap-confine,
     }
 
     # Allow snap-confine to be killed
