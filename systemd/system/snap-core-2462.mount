@@ -2,10 +2,10 @@
 Description=Mount unit for core
 
 [Mount]
-What=/var/lib/snapd/snaps/core_1689.snap
-Where=/snap/core/1689
+What=/var/lib/snapd/snaps/core_2462.snap
+Where=/snap/core/2462
 Type=squashfs
-Options=nodev
+Options=nodev,ro
 
 [Install]
 WantedBy=multi-user.target
