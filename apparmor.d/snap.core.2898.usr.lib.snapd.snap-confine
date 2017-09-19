@@ -1,7 +1,7 @@
 # Author: Jamie Strandboge <jamie@canonical.com>
 #include <tunables/global>
 
-/snap/core/2462/usr/lib/snapd/snap-confine (attach_disconnected) {
+/snap/core/2898/usr/lib/snapd/snap-confine (attach_disconnected) {
     # We run privileged, so be fanatical about what we include and don't use
     # any abstractions
     /etc/ld.so.cache r,
@@ -22,7 +22,7 @@
     /usr/lib/@{multiarch}/libseccomp.so* mr,
     /lib/@{multiarch}/libseccomp.so* mr,
 
-    /snap/core/2462/usr/lib/snapd/snap-confine mr,
+    /snap/core/2898/usr/lib/snapd/snap-confine mr,
 
     /dev/null rw,
     /dev/full rw,
@@ -106,7 +106,7 @@
     mount options=(rw bind) /tmp/snap.rootfs_*/ -> /tmp/snap.rootfs_*/,
     mount options=(rw unbindable) -> /tmp/snap.rootfs_*/,
     # the next line is for classic system
-    mount options=(rw rbind) /snap/{,ubuntu-}core/*/ -> /tmp/snap.rootfs_*/,
+    mount options=(rw rbind) /snap/*/*/ -> /tmp/snap.rootfs_*/,
     # the next line is for core system
     mount options=(rw rbind) / -> /tmp/snap.rootfs_*/,
     # all of the constructed rootfs is a rslave
@@ -163,9 +163,13 @@
     mount options=(rw rslave) -> /tmp/snap.rootfs_*/usr/src/,
     # /etc/alternatives (classic)
     mount options=(rw bind) /snap/{,ubuntu-}core/*/etc/alternatives/ -> /tmp/snap.rootfs_*/etc/alternatives/,
+    mount options=(rw bind) /snap/{,ubuntu-}core/*/etc/ssl/ -> /tmp/snap.rootfs_*/etc/ssl/,
+    mount options=(rw bind) /snap/{,ubuntu-}core/*/etc/nsswitch.conf -> /tmp/snap.rootfs_*/etc/nsswitch.conf,
     # /etc/alternatives (core)
     mount options=(rw bind) /etc/alternatives/ -> /tmp/snap.rootfs_*/etc/alternatives/,
     mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/alternatives/,
+    mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/ssl/,
+    mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/nsswitch.conf,
     # the /snap directory
     mount options=(rw rbind) /snap/ -> /tmp/snap.rootfs_*/snap/,
     mount options=(rw rslave) -> /tmp/snap.rootfs_*/snap/,
@@ -173,7 +177,7 @@
     mount options=(rw bind) /tmp/snap.rootfs_*/var/lib/snapd/hostfs/ -> /tmp/snap.rootfs_*/var/lib/snapd/hostfs/,
     mount options=(rw private) -> /tmp/snap.rootfs_*/var/lib/snapd/hostfs/,
     pivot_root,
-    # cleanup 
+    # cleanup
     umount /var/lib/snapd/hostfs/tmp/snap.rootfs_*/,
     umount /var/lib/snapd/hostfs/sys/,
     umount /var/lib/snapd/hostfs/dev/,
@@ -265,6 +269,9 @@
     # Allow snap-confine to move to the void
     /var/lib/snapd/void/ r,
 
+    # Allow snap-confine to read snap contexts
+    /var/lib/snapd/context/snap.* r,
+
     # Support for the quirk system
     /var/ r,
     /var/lib/ r,
@@ -276,6 +283,14 @@
     mount options=(ro rbind) /snap/{,ubuntu-}core/*/var/lib/** -> /var/lib/**,
     umount /var/lib/snapd/,
     mount options=(move) /tmp/snapd.quirks_*/ -> /var/lib/snapd/,
+    # On classic systems with a setuid root snap-confine when run by non-root
+    # user, the mimic_dir is created with the gid of the calling user (ie,
+    # not '0') so when setting the permissions (chmod) of the mimicked
+    # directory to that of the reference directory, a CAP_FSETID is triggered.
+    # snap-confine sets the directory up correctly, so simply silence the
+    # denial since we don't want to grant the capability as a whole to
+    # snap-confine.
+    deny capability fsetid,
 
     # support for the LXD quirk
     mount options=(rw rbind nodev nosuid noexec) /var/lib/snapd/hostfs/var/lib/lxd/ -> /var/lib/lxd/,
@@ -300,14 +315,14 @@
     /run/snapd/ns/*.lock rwk,
     /run/snapd/ns/*.mnt rw,
     /run/snapd/ns/*.fstab rw,
-    ptrace (read, readby, tracedby) peer=/snap/core/2462/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    ptrace (read, readby, tracedby) peer=/snap/core/2898/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
     @{PROC}/*/mountinfo r,
     capability sys_chroot,
     capability sys_admin,
-    signal (send, receive) set=(abrt) peer=/snap/core/2462/usr/lib/snapd/snap-confine,
-    signal (send) set=(int) peer=/snap/core/2462/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
-    signal (send, receive) set=(alrm, exists) peer=/snap/core/2462/usr/lib/snapd/snap-confine,
-    signal (receive) set=(exists) peer=/snap/core/2462/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    signal (send, receive) set=(abrt) peer=/snap/core/2898/usr/lib/snapd/snap-confine,
+    signal (send) set=(int) peer=/snap/core/2898/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    signal (send, receive) set=(alrm, exists) peer=/snap/core/2898/usr/lib/snapd/snap-confine,
+    signal (receive) set=(exists) peer=/snap/core/2898/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
 
     # For aa_change_hat() to go into ^mount-namespace-capture-helper
     @{PROC}/[0-9]*/attr/current w,
@@ -332,7 +347,7 @@
         /usr/lib/@{multiarch}/libseccomp.so* mr,
         /lib/@{multiarch}/libseccomp.so* mr,
 
-        /snap/core/2462/usr/lib/snapd/snap-confine mr,
+        /snap/core/2898/usr/lib/snapd/snap-confine mr,
 
         /dev/null rw,
         /dev/full rw,
@@ -355,19 +370,19 @@
         # NOTE: the source name is / even though we map /proc/123/ns/mnt
         mount options=(rw bind) / -> /run/snapd/ns/*.mnt,
         # This is the SIGALRM that we send and receive if a timeout expires
-        signal (send, receive) set=(alrm) peer=/snap/core/2462/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+        signal (send, receive) set=(alrm) peer=/snap/core/2898/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
         # Those two rules are exactly the same but we don't know if the parent process is still alive
         # and hence has the appropriate label or is already dead and hence has no label.
-        signal (send) set=(exists) peer=/snap/core/2462/usr/lib/snapd/snap-confine,
+        signal (send) set=(exists) peer=/snap/core/2898/usr/lib/snapd/snap-confine,
         signal (send) set=(exists) peer=unconfined,
         # This is so that we can abort
-        signal (send, receive) set=(abrt) peer=/snap/core/2462/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+        signal (send, receive) set=(abrt) peer=/snap/core/2898/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
         #  This is the signal we get if snap-confine dies (we subscribe to it with prctl)
-        signal (receive) set=(int) peer=/snap/core/2462/usr/lib/snapd/snap-confine,
+        signal (receive) set=(int) peer=/snap/core/2898/usr/lib/snapd/snap-confine,
         # This allows snap-confine to be killed from the outside.
         signal (receive) peer=unconfined,
         # This allows snap-confine to wait for us
-        ptrace (read, trace, tracedby) peer=/snap/core/2462/usr/lib/snapd/snap-confine,
+        ptrace (read, trace, tracedby) peer=/snap/core/2898/usr/lib/snapd/snap-confine,
     }
 
     # Allow snap-confine to be killed
