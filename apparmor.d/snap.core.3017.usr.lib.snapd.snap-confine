@@ -1,28 +1,31 @@
 # Author: Jamie Strandboge <jamie@canonical.com>
 #include <tunables/global>
 
-/snap/core/2774/usr/lib/snapd/snap-confine (attach_disconnected) {
+/snap/core/3017/usr/lib/snapd/snap-confine (attach_disconnected) {
     # We run privileged, so be fanatical about what we include and don't use
     # any abstractions
     /etc/ld.so.cache r,
-    /lib/@{multiarch}/ld-*.so mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}ld-*.so mrix,
     # libc, you are funny
-    /lib/@{multiarch}/libc{,-[0-9]*}.so* mr,
-    /lib/@{multiarch}/libpthread{,-[0-9]*}.so* mr,
-    /lib/@{multiarch}/librt{,-[0-9]*}.so* mr,
-    /lib/@{multiarch}/libgcc_s.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libc{,-[0-9]*}.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libpthread{,-[0-9]*}.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}librt{,-[0-9]*}.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libgcc_s.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libresolv{,-[0-9]*}.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libselinux.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libpcre.so* mr,
     # normal libs in order
-    /lib/@{multiarch}/libapparmor.so* mr,
-    /lib/@{multiarch}/libcgmanager.so* mr,
-    /lib/@{multiarch}/libdl-[0-9]*.so* mr,
-    /lib/@{multiarch}/libnih.so* mr,
-    /lib/@{multiarch}/libnih-dbus.so* mr,
-    /lib/@{multiarch}/libdbus-1.so* mr,
-    /lib/@{multiarch}/libudev.so* mr,
-    /usr/lib/@{multiarch}/libseccomp.so* mr,
-    /lib/@{multiarch}/libseccomp.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libapparmor.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libcgmanager.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libdl{,-[0-9]*}.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libnih.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libnih-dbus.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libdbus-1.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libudev.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libseccomp.so* mr,
+    /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libcap.so* mr,
 
-    /snap/core/2774/usr/lib/snapd/snap-confine mr,
+    /snap/core/3017/usr/lib/snapd/snap-confine mr,
 
     /dev/null rw,
     /dev/full rw,
@@ -57,6 +60,8 @@
     @{PROC}/[0-9]*/attr/exec w,
     # Reading current profile
     @{PROC}/[0-9]*/attr/current r,
+    # Reading available filesystems
+    @{PROC}/filesystems r,
 
     # To find where apparmor is mounted
     @{PROC}/[0-9]*/mounts r,
@@ -153,18 +158,29 @@
     mount options=(rw rbind) /run/ -> /tmp/snap.rootfs_*/run/,
     mount options=(rw rslave) -> /tmp/snap.rootfs_*/run/,
 
-    mount options=(rw rbind) {/usr,}/lib/modules/ -> /tmp/snap.rootfs_*/lib/modules/,
-    mount options=(rw rslave) -> /tmp/snap.rootfs_*/lib/modules/,
+    mount options=(rw rbind) {/usr,}/lib/modules/ -> /tmp/snap.rootfs_*{/usr,}/lib/modules/,
+    mount options=(rw rslave) -> /tmp/snap.rootfs_*{/usr,}/lib/modules/,
 
     mount options=(rw rbind) /var/log/ -> /tmp/snap.rootfs_*/var/log/,
     mount options=(rw rslave) -> /tmp/snap.rootfs_*/var/log/,
 
     mount options=(rw rbind) /usr/src/ -> /tmp/snap.rootfs_*/usr/src/,
     mount options=(rw rslave) -> /tmp/snap.rootfs_*/usr/src/,
+
+    # allow making host snap-exec available inside base snaps
+    mount options=(rw bind) /usr/lib/snapd/ -> /tmp/snap.rootfs_*/usr/lib/snapd/,
+    mount options=(rw slave) -> /tmp/snap.rootfs_*/usr/lib/snapd/,
+
+    # allow making re-execed host snap-exec available inside base snaps
+    mount options=(ro bind) /snap/core/*/usr/lib/snapd/ -> /tmp/snap.rootfs_*/usr/lib/snapd/,
+
+    mount options=(rw bind) /usr/bin/snapctl -> /tmp/snap.rootfs_*/usr/bin/snapctl,
+    mount options=(rw slave) -> /tmp/snap.rootfs_*/usr/bin/snapctl,
+
     # /etc/alternatives (classic)
     mount options=(rw bind) /snap/{,ubuntu-}core/*/etc/alternatives/ -> /tmp/snap.rootfs_*/etc/alternatives/,
-    mount options=(rw bind) /snap/{,ubuntu-}core/*/etc/ssl/ -> /tmp/snap.rootfs_*/etc/ssl/,
-    mount options=(rw bind) /snap/{,ubuntu-}core/*/etc/nsswitch.conf -> /tmp/snap.rootfs_*/etc/nsswitch.conf,
+    mount options=(rw bind) /snap/*/*/etc/ssl/ -> /tmp/snap.rootfs_*/etc/ssl/,
+    mount options=(rw bind) /snap/*/*/etc/nsswitch.conf -> /tmp/snap.rootfs_*/etc/nsswitch.conf,
     # /etc/alternatives (core)
     mount options=(rw bind) /etc/alternatives/ -> /tmp/snap.rootfs_*/etc/alternatives/,
     mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/alternatives/,
@@ -315,14 +331,14 @@
     /run/snapd/ns/*.lock rwk,
     /run/snapd/ns/*.mnt rw,
     /run/snapd/ns/*.fstab rw,
-    ptrace (read, readby, tracedby) peer=/snap/core/2774/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    ptrace (read, readby, tracedby) peer=/snap/core/3017/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
     @{PROC}/*/mountinfo r,
     capability sys_chroot,
     capability sys_admin,
-    signal (send, receive) set=(abrt) peer=/snap/core/2774/usr/lib/snapd/snap-confine,
-    signal (send) set=(int) peer=/snap/core/2774/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
-    signal (send, receive) set=(alrm, exists) peer=/snap/core/2774/usr/lib/snapd/snap-confine,
-    signal (receive) set=(exists) peer=/snap/core/2774/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    signal (send, receive) set=(abrt) peer=/snap/core/3017/usr/lib/snapd/snap-confine,
+    signal (send) set=(int) peer=/snap/core/3017/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+    signal (send, receive) set=(alrm, exists) peer=/snap/core/3017/usr/lib/snapd/snap-confine,
+    signal (receive) set=(exists) peer=/snap/core/3017/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
 
     # For aa_change_hat() to go into ^mount-namespace-capture-helper
     @{PROC}/[0-9]*/attr/current w,
@@ -331,23 +347,27 @@
         # We run privileged, so be fanatical about what we include and don't use
         # any abstractions
         /etc/ld.so.cache r,
-        /lib/@{multiarch}/ld-*.so mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}ld-*.so mrix,
         # libc, you are funny
-        /lib/@{multiarch}/libc{,-[0-9]*}.so* mr,
-        /lib/@{multiarch}/libpthread{,-[0-9]*}.so* mr,
-        /lib/@{multiarch}/librt{,-[0-9]*}.so* mr,
-        /lib/@{multiarch}/libgcc_s.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libc{,-[0-9]*}.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libpthread{,-[0-9]*}.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}librt{,-[0-9]*}.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libgcc_s.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libresolv{,-[0-9]*}.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libselinux.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libpcre.so* mr,
         # normal libs in order
-        /lib/@{multiarch}/libapparmor.so* mr,
-        /lib/@{multiarch}/libcgmanager.so* mr,
-        /lib/@{multiarch}/libnih.so* mr,
-        /lib/@{multiarch}/libnih-dbus.so* mr,
-        /lib/@{multiarch}/libdbus-1.so* mr,
-        /lib/@{multiarch}/libudev.so* mr,
-        /usr/lib/@{multiarch}/libseccomp.so* mr,
-        /lib/@{multiarch}/libseccomp.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libapparmor.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libcgmanager.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libdl{,-[0-9]*}.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libnih.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libnih-dbus.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libdbus-1.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libudev.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libseccomp.so* mr,
+        /{,usr/}lib{,32,64,x32}/{,@{multiarch}/}libcap.so* mr,
 
-        /snap/core/2774/usr/lib/snapd/snap-confine mr,
+        /snap/core/3017/usr/lib/snapd/snap-confine mr,
 
         /dev/null rw,
         /dev/full rw,
@@ -370,19 +390,19 @@
         # NOTE: the source name is / even though we map /proc/123/ns/mnt
         mount options=(rw bind) / -> /run/snapd/ns/*.mnt,
         # This is the SIGALRM that we send and receive if a timeout expires
-        signal (send, receive) set=(alrm) peer=/snap/core/2774/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+        signal (send, receive) set=(alrm) peer=/snap/core/3017/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
         # Those two rules are exactly the same but we don't know if the parent process is still alive
         # and hence has the appropriate label or is already dead and hence has no label.
-        signal (send) set=(exists) peer=/snap/core/2774/usr/lib/snapd/snap-confine,
+        signal (send) set=(exists) peer=/snap/core/3017/usr/lib/snapd/snap-confine,
         signal (send) set=(exists) peer=unconfined,
         # This is so that we can abort
-        signal (send, receive) set=(abrt) peer=/snap/core/2774/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
+        signal (send, receive) set=(abrt) peer=/snap/core/3017/usr/lib/snapd/snap-confine//mount-namespace-capture-helper,
         #  This is the signal we get if snap-confine dies (we subscribe to it with prctl)
-        signal (receive) set=(int) peer=/snap/core/2774/usr/lib/snapd/snap-confine,
+        signal (receive) set=(int) peer=/snap/core/3017/usr/lib/snapd/snap-confine,
         # This allows snap-confine to be killed from the outside.
         signal (receive) peer=unconfined,
         # This allows snap-confine to wait for us
-        ptrace (read, trace, tracedby) peer=/snap/core/2774/usr/lib/snapd/snap-confine,
+        ptrace (read, trace, tracedby) peer=/snap/core/3017/usr/lib/snapd/snap-confine,
     }
 
     # Allow snap-confine to be killed
